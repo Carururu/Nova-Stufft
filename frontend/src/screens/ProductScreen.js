@@ -100,7 +100,7 @@ const ProductScreen = ({ history, match }) => {
                   <ListGroup.Item className='d-grid gap-2'>
                     <Button
                       onClick={addToCartHandler}
-                      className='btn btn-lg'
+                      className='btn btn-lg btn-primary'
                       type='button'
                     >
                       Add To Cart
