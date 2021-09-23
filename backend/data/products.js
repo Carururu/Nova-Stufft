@@ -1,6 +1,5 @@
 const products = [
   {
-    _id: '1',
     name: 'Puppet Elmo',
     image: '/images/Elmo.jpg',
     description: 'A puppet Elmo from Sesame Street',
@@ -10,7 +9,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '2',
     name: 'Luffy',
     image: '/images/Luffy.jpg',
     description: 'Stuffed toy Luffy from anime One Piece',
@@ -20,7 +18,6 @@ const products = [
     numReviews: 8,
   },
   {
-    _id: '3',
     name: 'Mickey Mouse',
     image: '/images/MickeyMouse.jpg',
     description: 'Mickey Mouse stuffed toy, a Disney character',
@@ -30,7 +27,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '4',
     name: 'Pichu',
     image: '/images/Pichu.jpg',
     description: 'Pichu stuffed toy from the anime and game Pokemon',
@@ -40,7 +36,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '5',
     name: 'Spongebob',
     image: '/images/Spongebob.jpg',
     description: 'Spongebob stuffed toy from the cartoon Spongebob Squarepants',
@@ -50,7 +45,6 @@ const products = [
     numReviews: 10,
   },
   {
-    _id: '6',
     name: 'Stitch',
     image: '/images/Stitch.jpg',
     description: 'Stitch stuffed toy from the cartoon Lilo and Stitch',
