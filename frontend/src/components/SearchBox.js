@@ -23,8 +23,8 @@ const SearchBox = ({ history }) => {
         className='me-2 ms-lg-5 d-inline-block'
         style={{ width: 'auto' }}
       ></Form.Control>
-      <Button type='submit' variant='outline-success' style={{ padding: '6' }}>
-        Search
+      <Button type='submit' variant='success' style={{ padding: '6' }}>
+        <i className='fas fa-search'></i>
       </Button>
     </Form>
   )
