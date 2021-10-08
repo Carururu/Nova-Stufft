@@ -5,6 +5,7 @@ import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 import { Link } from 'react-router-dom'
 import { createOrder } from '../actions/orderActions'
+import { removeItemsFromCart } from '../actions/cartActions'
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch()
@@ -49,6 +50,7 @@ const PlaceOrderScreen = ({ history }) => {
         totalPrice: cart.totalPrice,
       })
     )
+    dispatch(removeItemsFromCart({ cart: cart.cartItems }))
   }
 
   return (
@@ -75,34 +77,23 @@ const PlaceOrderScreen = ({ history }) => {
 
             <ListGroup.Item>
               <h2>Order Items</h2>
-              {cart.cartItems.length === 0 ? (
-                <Message>Your cart is empty</Message>
-              ) : (
-                <ListGroup variant='flush'>
-                  {cart.cartItems.map((item, index) => (
-                    <ListGroup.Item key={index}>
-                      <Row>
-                        <Col md={1}>
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            fluid
-                            rounded
-                          />
-                        </Col>
-                        <Col>
-                          <Link to={`/product/${item.product}`}>
-                            {item.name}
-                          </Link>
-                        </Col>
-                        <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              )}
+              <ListGroup variant='flush'>
+                {cart.cartItems.map((item, index) => (
+                  <ListGroup.Item key={index}>
+                    <Row>
+                      <Col md={1}>
+                        <Image src={item.image} alt={item.name} fluid rounded />
+                      </Col>
+                      <Col>
+                        <Link to={`/product/${item.product}`}>{item.name}</Link>
+                      </Col>
+                      <Col md={4}>
+                        {item.qty} x ${item.price} = ${item.qty * item.price}
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
             </ListGroup.Item>
           </ListGroup>
         </Col>

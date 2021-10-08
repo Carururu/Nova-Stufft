@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message'
 import { addToCart, removeFromCart } from '../actions/cartActions'
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 
 const CartScreen = ({ match, location, history }) => {
   const productId = match.params.id
@@ -14,6 +15,9 @@ const CartScreen = ({ match, location, history }) => {
 
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
+
+  const orderCreate = useSelector((state) => state.orderCreate)
+  const { success } = orderCreate
 
   useEffect(() => {
     if (productId) {
@@ -26,6 +30,9 @@ const CartScreen = ({ match, location, history }) => {
   }
 
   const checkoutHandler = () => {
+    if (success) {
+      dispatch({ type: ORDER_CREATE_RESET })
+    }
     history.push('/login?redirect=shipping')
   }
 
@@ -81,31 +88,33 @@ const CartScreen = ({ match, location, history }) => {
           </ListGroup>
         )}
       </Col>
-      <Col md={4}>
-        <Card>
-          <ListGroup variant='flush'>
-            <ListGroup.Item>
-              <h2>
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
-                items
-              </h2>
-              $
-              {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
-                .toFixed(2)}
-            </ListGroup.Item>
-            <ListGroup.Item className='d-grid gap-2'>
-              <Button
-                type='button'
-                className='btn btn-lg btn-primary'
-                onClick={checkoutHandler}
-              >
-                Proceed To Checkout
-              </Button>
-            </ListGroup.Item>
-          </ListGroup>
-        </Card>
-      </Col>
+      {cartItems.length > 0 && (
+        <Col md={4}>
+          <Card>
+            <ListGroup variant='flush'>
+              <ListGroup.Item>
+                <h2>
+                  Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}
+                  ) items
+                </h2>
+                $
+                {cartItems
+                  .reduce((acc, item) => acc + item.qty * item.price, 0)
+                  .toFixed(2)}
+              </ListGroup.Item>
+              <ListGroup.Item className='d-grid gap-2'>
+                <Button
+                  type='button'
+                  className='btn btn-lg btn-primary'
+                  onClick={checkoutHandler}
+                >
+                  Proceed To Checkout
+                </Button>
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
+        </Col>
+      )}
     </Row>
   )
 }

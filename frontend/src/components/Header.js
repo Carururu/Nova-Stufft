@@ -5,12 +5,22 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import SearchBox from './SearchBox'
 import { logout } from '../actions/userActions'
+import { ORDER_DETAILS_RESET } from '../constants/orderConstants'
 
 const Header = () => {
   const dispatch = useDispatch()
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+
+  const orderDetails = useSelector((state) => state.orderDetails)
+  const { order } = orderDetails
+
+  const profileHandler = () => {
+    if (order) {
+      dispatch({ type: ORDER_DETAILS_RESET })
+    }
+  }
 
   const logoutHandler = () => {
     dispatch(logout())
@@ -41,7 +51,9 @@ const Header = () => {
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id='username'>
                   <LinkContainer to='/profile'>
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                    <NavDropdown.Item onClick={profileHandler}>
+                      Profile
+                    </NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
