@@ -11,8 +11,11 @@ import {
   createProduct,
 } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
+import { Link } from 'react-router-dom'
 
 const ProductListScreen = ({ history, match }) => {
+  const keyword = match.params.keyword
+
   const pageNumber = match.params.pageNumber || 1
 
   const dispatch = useDispatch()
@@ -48,7 +51,7 @@ const ProductListScreen = ({ history, match }) => {
     if (successCreate) {
       history.push(`/admin/product/${createdProduct._id}/edit`)
     } else {
-      dispatch(listProducts('', pageNumber))
+      dispatch(listProducts(keyword, pageNumber))
     }
   }, [
     dispatch,
@@ -58,6 +61,7 @@ const ProductListScreen = ({ history, match }) => {
     successCreate,
     createdProduct,
     pageNumber,
+    keyword,
   ])
 
   const deleteHandler = (id) => {
@@ -74,7 +78,18 @@ const ProductListScreen = ({ history, match }) => {
     <>
       <Row className='align-items-center'>
         <Col>
-          <h1>Products</h1>
+          {!keyword ? (
+            <>
+              <h1>Products</h1>
+            </>
+          ) : (
+            <>
+              <Link to='/admin/productlist' className='btn btn-primary'>
+                Go Back
+              </Link>
+              <h1>Search results for '{keyword}'</h1>
+            </>
+          )}
         </Col>
         <Col className='text-end'>
           <Button className='my-3' onClick={createProductHandler}>
@@ -90,6 +105,8 @@ const ProductListScreen = ({ history, match }) => {
         <Loader />
       ) : error ? (
         <Message variant='danger'>{error}</Message>
+      ) : products.length === 0 ? (
+        <h3>No result</h3>
       ) : (
         <>
           <Table

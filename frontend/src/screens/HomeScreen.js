@@ -28,13 +28,19 @@ const HomeScreen = ({ match }) => {
     <>
       <Meta />
       {!keyword ? (
-        <ProductCarousel />
+        <>
+          <ProductCarousel />
+          <h1>Latest Products</h1>
+        </>
       ) : (
-        <Link to='/' className='btn btn-primary'>
-          Go Back
-        </Link>
+        <>
+          <Link to='/' className='btn btn-primary'>
+            Go Back
+          </Link>
+          <h1>Search results for '{keyword}'</h1>
+        </>
       )}
-      <h1>Latest Products</h1>
+
       {loading ? (
         <Loader />
       ) : error ? (
@@ -42,11 +48,15 @@ const HomeScreen = ({ match }) => {
       ) : (
         <>
           <Row>
-            {products.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
+            {products.length === 0 ? (
+              <h3>No result</h3>
+            ) : (
+              products.map((product) => (
+                <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                  <Product product={product} />
+                </Col>
+              ))
+            )}
           </Row>
           <Paginate
             pages={pages}
