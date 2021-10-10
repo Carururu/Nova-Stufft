@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Table, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,7 +7,9 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listUsers, deleteUser } from '../actions/userActions'
 
-const UserListScreen = ({ history }) => {
+const UserListScreen = ({ history, match }) => {
+  const keyword = match.params.keyword
+
   const dispatch = useDispatch()
 
   const userList = useSelector((state) => state.userList)
@@ -20,11 +23,11 @@ const UserListScreen = ({ history }) => {
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
-      dispatch(listUsers())
+      dispatch(listUsers(keyword))
     } else {
       history.push('/login')
     }
-  }, [dispatch, history, userInfo, success])
+  }, [dispatch, history, userInfo, success, keyword])
 
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
@@ -34,11 +37,23 @@ const UserListScreen = ({ history }) => {
 
   return (
     <>
-      <h1>Users</h1>
+      {keyword ? (
+        <>
+          <Link to='/admin/userlist' className='btn btn-primary'>
+            Go Back
+          </Link>
+          <h1>Search results for '{keyword}'</h1>
+        </>
+      ) : (
+        <h1>Users</h1>
+      )}
+
       {loading ? (
         <Loader />
       ) : error ? (
         <Message variant='danger'>{error}</Message>
+      ) : users.length === 0 ? (
+        <h3>No result</h3>
       ) : (
         <Table
           striped

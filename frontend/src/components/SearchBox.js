@@ -12,11 +12,17 @@ const SearchBox = ({ history }) => {
     e.preventDefault()
     switch (pathSplit) {
       case '/admin/productlist':
-      case `/admin/productlist/search/${keyword}`:
         if (keyword.trim()) {
           history.push(`/admin/productlist/search/${keyword}`)
         } else {
           history.push('/admin/productlist')
+        }
+        break
+      case '/admin/userlist':
+        if (keyword.trim()) {
+          history.push(`/admin/userlist/search/${keyword}`)
+        } else {
+          history.push('/admin/userlist')
         }
         break
       default:
@@ -35,7 +41,9 @@ const SearchBox = ({ history }) => {
         name='q'
         onChange={(e) => setKeyword(e.target.value)}
         placeholder={
-          path === '/admin/userlist' ? 'Search Users...' : 'Search Products...'
+          pathSplit === '/admin/userlist'
+            ? 'Search Users...'
+            : 'Search Products...'
         }
         className='me-2 ms-lg-5 d-inline-block'
         style={{ width: 'auto' }}
