@@ -14,6 +14,7 @@ import {
 import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
+  ORDER_DETAILS_RESET,
 } from '../constants/orderConstants'
 
 const OrderScreen = ({ match, history }) => {
@@ -49,6 +50,10 @@ const OrderScreen = ({ match, history }) => {
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
+    }
+
+    if (order && order._id !== orderId) {
+      dispatch({ type: ORDER_DETAILS_RESET })
     }
 
     const addPayPalScript = async () => {
