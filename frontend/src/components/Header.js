@@ -7,7 +7,7 @@ import SearchBox from './SearchBox'
 import { logout } from '../actions/userActions'
 import { ORDER_DETAILS_RESET } from '../constants/orderConstants'
 
-const Header = () => {
+const Header = ({ history }) => {
   const dispatch = useDispatch()
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -24,6 +24,7 @@ const Header = () => {
 
   const logoutHandler = () => {
     dispatch(logout())
+    history.push('/login')
   }
 
   return (
