@@ -6,7 +6,7 @@ const SearchBox = ({ history }) => {
 
   const pathSplit = path.split('/search')[0]
 
-  const [keyword, setKeyword] = useState('')
+  let [keyword, setKeyword] = useState('')
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -32,13 +32,14 @@ const SearchBox = ({ history }) => {
           history.push('/')
         }
     }
+    document.getElementById('searchBox').value = ''
   }
 
   return (
     <Form onSubmit={submitHandler}>
       <Form.Control
         type='text'
-        name='q'
+        id='searchBox'
         onChange={(e) => setKeyword(e.target.value)}
         placeholder={
           pathSplit === '/admin/userlist'
