@@ -73,16 +73,22 @@ const OrderScreen = ({ match, history }) => {
       dispatch({ type: ORDER_DELIVER_RESET })
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
-      if (!window.paypal) {
-        addPayPalScript()
-      } else {
-        setSdkReady(true)
+      if (order.paymentMethod === 'Paypal') {
+        if (!window.paypal) {
+          addPayPalScript()
+        } else {
+          setSdkReady(true)
+        }
       }
     }
   }, [dispatch, history, userInfo, orderId, successPay, order, successDeliver])
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult))
+  }
+
+  const paymentHandler = () => {
+    dispatch(payOrder(orderId))
   }
 
   const deliverHandler = () => {
@@ -199,10 +205,11 @@ const OrderScreen = ({ match, history }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {!order.isPaid && (
+
+              {order.paymentMethod === 'PayPal' && !order.isPaid && (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
-                  {!sdkReady ? (
+                  {!order.paymentMethod === 'PayPal' && !sdkReady ? (
                     <Loader />
                   ) : (
                     <PayPalButton
@@ -213,10 +220,35 @@ const OrderScreen = ({ match, history }) => {
                 </ListGroup.Item>
               )}
               {loadingDeliver && <Loader />}
+
               {userInfo &&
-                userInfo.isAdmin &&
-                order.isPaid &&
-                !order.isDelivered && (
+              userInfo.isAdmin &&
+              order.paymentMethod === 'PayPal' &&
+              order.isPaid &&
+              !order.isDelivered ? (
+                <ListGroup.Item className='d-grid gap-2'>
+                  <Button
+                    type='button'
+                    className='btn btn-lg btn-primary'
+                    onClick={deliverHandler}
+                  >
+                    Mark As Delivered
+                  </Button>
+                </ListGroup.Item>
+              ) : userInfo.isAdmin &&
+                order.paymentMethod === 'Cash on Delivery' &&
+                !order.isPaid &&
+                !order.isDelivered ? (
+                <>
+                  <ListGroup.Item className='d-grid gap-2' id='paidButton'>
+                    <Button
+                      type='button'
+                      className='btn btn-lg btn-primary'
+                      onClick={paymentHandler}
+                    >
+                      Mark As Paid
+                    </Button>
+                  </ListGroup.Item>
                   <ListGroup.Item className='d-grid gap-2'>
                     <Button
                       type='button'
@@ -226,7 +258,34 @@ const OrderScreen = ({ match, history }) => {
                       Mark As Delivered
                     </Button>
                   </ListGroup.Item>
-                )}
+                </>
+              ) : userInfo.isAdmin &&
+                order.paymentMethod === 'Cash on Delivery' &&
+                !order.isPaid ? (
+                <ListGroup.Item className='d-grid gap-2' id='paidButton'>
+                  <Button
+                    type='button'
+                    className='btn btn-lg btn-primary'
+                    onClick={paymentHandler}
+                  >
+                    Mark As Paid
+                  </Button>
+                </ListGroup.Item>
+              ) : userInfo.isAdmin &&
+                order.paymentMethod === 'Cash on Delivery' &&
+                !order.isDelivered ? (
+                <ListGroup.Item className='d-grid gap-2'>
+                  <Button
+                    type='button'
+                    className='btn btn-lg btn-primary'
+                    onClick={deliverHandler}
+                  >
+                    Mark As Delivered
+                  </Button>
+                </ListGroup.Item>
+              ) : (
+                <></>
+              )}
             </ListGroup>
           </Card>
         </Col>

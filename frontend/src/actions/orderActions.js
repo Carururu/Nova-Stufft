@@ -105,16 +105,27 @@ export const payOrder =
         },
       }
 
-      const { data } = await axios.put(
-        `/api/orders/${orderId}/pay`,
-        paymentResult,
-        config
-      )
-
-      dispatch({
-        type: ORDER_PAY_SUCCESS,
-        payload: data,
-      })
+      if (paymentResult) {
+        const { data } = await axios.put(
+          `/api/orders/${orderId}/pay`,
+          paymentResult,
+          config
+        )
+        dispatch({
+          type: ORDER_PAY_SUCCESS,
+          payload: data,
+        })
+      } else {
+        const { data } = await axios.put(
+          `/api/orders/${orderId}/pay`,
+          {},
+          config
+        )
+        dispatch({
+          type: ORDER_PAY_SUCCESS,
+          payload: data,
+        })
+      }
     } catch (error) {
       dispatch({
         type: ORDER_PAY_FAIL,

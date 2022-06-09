@@ -30,7 +30,7 @@ const HomeScreen = ({ match }) => {
       {!keyword ? (
         <>
           <ProductCarousel />
-          <h1>Latest Products</h1>
+          <h1>All Products</h1>
         </>
       ) : (
         <>
